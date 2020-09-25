@@ -5,9 +5,9 @@ const make_collection_header = (day_name) => {
     return collection_header
 }
 
-const make_collection_content = () => {
+const make_collection_content = (type) => {
     const collection_content = document.createElement('div')
-    collection_content.setAttribute('class', 'collection_content')
+    collection_content.setAttribute('class', 'collection_content '+type)
     return collection_content
 }
 
@@ -16,9 +16,11 @@ const make_day = (day_name) => {
     collection.setAttribute('class', 'collection day')
 
     collection.appendChild(make_collection_header(day_name))
-    collection.appendChild(make_collection_content())
-    collection.appendChild(make_collection_content())
-    collection.appendChild(make_collection_content())
+    collection.appendChild(make_collection_content('main'))
+    collection.appendChild(make_collection_content('mini'))
+    collection.appendChild(make_collection_content('main'))
+    collection.appendChild(make_collection_content('mini'))
+    collection.appendChild(make_collection_content('main'))
 
     return collection
 }

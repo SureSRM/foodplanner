@@ -50,6 +50,10 @@ body {
     border-radius: 7px;
 }
 
+.collection_content.mini {
+    min-height: 40px;
+}
+
 .item {
     padding: 5px;
     margin: 3px;
