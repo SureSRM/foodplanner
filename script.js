@@ -61,6 +61,8 @@ const calendar_sortables = Array.from(calendar_row.getElementsByClassName('colle
         Sortable.create(item, {
             group: 'shared',
             removeOnSpill: true,
+            multiDrag: true,
+            selectedClass: 'selected',
         })
     })
 
@@ -73,6 +75,8 @@ const pantry_sortables = Array.from(pantry_row.getElementsByClassName('collectio
                 put: false,
             },
             sort: false,
+            multiDrag: true,
+            selectedClass: 'selected',
         })
     })
 

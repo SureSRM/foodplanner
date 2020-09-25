@@ -59,6 +59,8 @@ body {
     border-color: darkgray;
     border-width: 1px;
     border-radius: 5px;
+
+    box-sizing: border-box;
 }
 
 .calendar {
@@ -103,4 +105,8 @@ body {
 
 .misc {
     background-color: rgb(224, 224, 224);
+}
+
+.selected {
+    border-color: black;
 }
