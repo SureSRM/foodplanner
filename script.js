@@ -53,7 +53,7 @@ days.forEach((day_name)=>{
 
 const pantry_row = document.getElementById("pantry_row");
 const pantries = [
-    'veg', 'legumes', 'cereal', 'fruit', 'dressing','process', 'misc'
+    'veg', 'legumes', 'cereal', 'fruit', 'seednuts', 'dressing','process', 'misc'
     ]
 
 pantries.forEach((pantry)=>{
