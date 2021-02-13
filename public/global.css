@@ -1,0 +1,127 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: gray;
+}
+
+* {
+    font-family: Helvetica;
+}
+
+.section {
+    display: flex;
+    flex-flow: column;
+    padding: 10px;
+
+}
+
+.section_header {
+    margin: 5px;
+    color: white;
+}
+
+.collection_row {
+    display: flex;
+    flex-flow: row;
+}
+
+.collection {
+    width: 150px;
+    padding: 10px;
+    margin: 5px;
+
+
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 7px;
+}
+
+.collection_header {
+    margin: 3px;
+}
+
+.collection_content {
+    min-height: 130px;
+    margin: 3px;
+    padding: 3px;
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 7px;
+}
+
+.collection_content.mini {
+    min-height: 40px;
+}
+
+.item {
+    padding: 5px;
+    margin: 3px;
+    background-color: white;
+
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+    border-radius: 5px;
+
+    box-sizing: border-box;
+}
+
+.calendar {
+    background-color: lightgray;
+}
+
+.pantries {
+    background-color: gray;
+}
+
+.day {
+    background-color: darkgray;
+}
+
+.pantry {
+    background-color: beige;
+}
+
+.bin {
+    background-color: lightcoral;
+}
+
+.veg {
+    background-color: rgb(170, 214, 170);
+}
+
+.legumes {
+    background-color: rgb(248, 201, 139);
+}
+
+.cereal {
+    background-color: rgb(255, 239, 170);
+}
+
+.fruit {
+    background-color: rgb(252, 178, 194);
+}
+
+.seednuts {
+    background-color: rgb(235, 207, 152);
+}
+
+.dressing {
+    background-color: rgb(243, 243, 243);
+}
+
+.process {
+    background-color: rgb(222, 176, 236);
+}
+
+.misc {
+    background-color: rgb(224, 224, 224);
+}
+
+.selected {
+    border-color: black;
+}
