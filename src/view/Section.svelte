@@ -1,35 +1,51 @@
 <script>
 	import Sortable from 'sortablejs'
-	import { onMount } from "svelte";
+	import { onMount, onDestroy } from "svelte";
 
 	import Item from './Item.svelte'
 
-	export let sortable
+	export let isSortable
 
 	export let type = 'main'
 	export let store
-	let self
-	onMount(async function() {
+	// Items takes the initial value of store and doesnt reacts anymore
+	// because Sortable manages the dom
+	let items = $store
 
-		let group = sortable ? 'shared' : ({
+	let self
+	let sortable
+	let unsubscribe
+	onMount(async () => {
+
+		let group = isSortable ? 'shared' : ({
 				name: 'shared',
 				pull: 'clone',
 				put: false,
 		})
 
-		Sortable.create(self, {
+		sortable = Sortable.create(self, {
 				group,
-				sort: sortable,
-				removeOnSpill: sortable,
+				sort: isSortable,
+				removeOnSpill: isSortable,
 				multiDrag: true,
 				selectedClass: 'selected',
 				animation: 100,
+				store: {
+						set: (s) => {
+							store.set(s.toArray())
+						},
+				},
 		})
+	})
+
+	onDestroy(async () => {
+		sortable.destroy()
+		unsubscribe()
 	})
 </script>
 
 <div class="collection_content {type}" bind:this={self}>
-	{#each $store as item}
+	{#each items as item}
 		<Item {type} {item}/>
 	{/each}
 </div>

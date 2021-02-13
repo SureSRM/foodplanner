@@ -13,7 +13,7 @@
 <Collection type='day' title={dayName}>
 
 	{#each daySections as daySection, i}
-		<Section sortable={true} store={store[i]} type={daySection} />
+		<Section isSortable={true} store={store[i]} type={daySection} />
 	{/each}
 
 </Collection>

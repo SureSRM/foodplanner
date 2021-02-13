@@ -3,4 +3,4 @@
 	export let item
 </script>
 
-<div class="item {type}">{item.name}</div>
+<div data-id={item} class="item {type}">{item.name}</div>

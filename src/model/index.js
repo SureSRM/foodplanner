@@ -17,8 +17,10 @@ const initCalendar = () =>
 	dayNames.reduce( (o, dayName) =>
 		({...o, [dayName]: initDay()}), {})
 
-export const calendarStore = initCalendar()
+export const calendarStore =initCalendar()
+
 calendarStore['lun'][0].set([new FoodItem('A')])
+calendarStore['lun'][0].subscribe(console.log)
 
 
 export const shelfNames = ['veg', 'legumes', 'cereal', 'fruit', 'seednuts', 'dressing', 'process', 'misc']
