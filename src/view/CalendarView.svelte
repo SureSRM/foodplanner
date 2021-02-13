@@ -2,11 +2,11 @@
 	import Day from './Day.svelte'
 	import { FoodItem } from '../model'
 
-	const dayNames = ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
+	const dayNames = ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom',]
 
 	export let store = dayNames.reduce( (o, dayName) => ({...o, [dayName]: []}), {})
 
-	store['Lun'][1]=[new FoodItem('A')]
+	store['lun'][1]=[new FoodItem('A'), new FoodItem('B'), new FoodItem('C')]
 </script>
 
 <div class="section calendar" >

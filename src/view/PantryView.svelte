@@ -1,6 +1,5 @@
 <script>
 	import Shelf from './Shelf.svelte'
-	export let pantry
 
 	const shelfNames = ['veg', 'legumes', 'cereal', 'fruit', 'seednuts', 'dressing', 'process', 'misc']
 	export let store = shelfNames.reduce( (o, dayName) => ({...o, [dayName]: []}), {})

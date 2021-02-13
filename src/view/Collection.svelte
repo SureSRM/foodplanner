@@ -5,5 +5,5 @@
 
 <div class="collection {type} {title}">
 	<h2 class="collection_header">{title}</h2>
-	<slot></slot>
+	<slot />
 </div>

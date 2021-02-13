@@ -1,14 +1,16 @@
+<script context="module">
+	import { Sortable, MultiDrag } from 'sortablejs';
+	Sortable.mount(new MultiDrag());
+</script>
 <script>
-import CalendarView from './view/CalendarView.svelte'
+	import CalendarView from './view/CalendarView.svelte'
 	import PantryView from './view/PantryView.svelte'
 	import ManagementView from './view/ManagementView.svelte'
 
-	let pantry = ['a', 'b']
-	let calendar
 </script>
 
 <main>
-	<CalendarView></CalendarView>
-	<PantryView {pantry}></PantryView>
-	<ManagementView></ManagementView>
+	<CalendarView />
+	<PantryView />
+	<ManagementView />
 </main>
