@@ -6,7 +6,8 @@
 	export let dayName
 
 	const daySections = ['main', 'mini', 'main', 'mini', 'main']
-	export let store =daySections.map([])
+
+	export let store = daySections.map([])
 </script>
 
 <Collection type='day' title={dayName}>

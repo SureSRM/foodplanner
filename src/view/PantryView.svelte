@@ -3,16 +3,16 @@
 	export let pantry
 
 	const shelfNames = ['veg', 'legumes', 'cereal', 'fruit', 'seednuts', 'dressing', 'process', 'misc']
-	export let store = shelfNames.map(()=>[])
+	export let store = shelfNames.reduce( (o, dayName) => ({...o, [dayName]: []}), {})
 
-	store[0]=['A']
+	store['veg']=['A']
 </script>
 
 <div class="section pantries">
 		<h1 class=section_header>Pantry</h1>
 		<div id="pantry_row" class="collection_row">
-			{#each shelfNames as shelfName, i}
-				<Shelf store={store[i]} foodFamily={shelfName}></Shelf>
+			{#each shelfNames as shelfName}
+				<Shelf store={store[shelfName]} foodFamily={shelfName}></Shelf>
 			{/each}
 		</div>
 </div>

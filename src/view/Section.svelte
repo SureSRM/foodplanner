@@ -8,6 +8,6 @@
 
 <div class="collection_content {type}">
 	{#each items as item, i}
-		<Item name={item}/>
+		<Item {type} {item}/>
 	{/each}
 </div>

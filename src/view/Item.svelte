@@ -1,6 +1,6 @@
 <script>
 	export let type
-	export let name
+	export let item
 </script>
 
-<div class="item {type}">{name}</div>
+<div class="item {type}">{item.name}</div>
