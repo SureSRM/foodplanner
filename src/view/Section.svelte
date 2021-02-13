@@ -7,9 +7,7 @@
 	export let sortable
 
 	export let type = 'main'
-	export let store = []
-	let items = store
-
+	export let store
 	let self
 	onMount(async function() {
 
@@ -31,7 +29,7 @@
 </script>
 
 <div class="collection_content {type}" bind:this={self}>
-	{#each items as item}
+	{#each $store as item}
 		<Item {type} {item}/>
 	{/each}
 </div>

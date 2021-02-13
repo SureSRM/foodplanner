@@ -1,12 +1,6 @@
 <script>
 	import Day from './Day.svelte'
-	import { FoodItem } from '../model'
-
-	const dayNames = ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom',]
-
-	export let store = dayNames.reduce( (o, dayName) => ({...o, [dayName]: []}), {})
-
-	store['lun'][1]=[new FoodItem('A'), new FoodItem('B'), new FoodItem('C')]
+	import { dayNames, calendarStore as store } from '../model'
 </script>
 
 <div class="section calendar" >

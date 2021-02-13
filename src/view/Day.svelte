@@ -3,11 +3,11 @@
 	import Section from './Section.svelte'
 	import Item from './Item.svelte'
 
+	import { daySections } from '../model'
+
 	export let dayName
 
-	const daySections = ['main', 'mini', 'main', 'mini', 'main']
-
-	export let store = daySections.map([])
+	export let store
 </script>
 
 <Collection type='day' title={dayName}>
