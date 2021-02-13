@@ -4,13 +4,15 @@
 	import Item from './Item.svelte'
 
 	export let dayName
-	export let store = Array(5).fill([])
+
+	const daySections = ['main', 'mini', 'main', 'mini', 'main']
+	export let store =daySections.map([])
 </script>
 
 <Collection type='day' title={dayName}>
-	<Section store={store[0]}></Section>
-	<Section store={store[1]} type='mini'></Section>
-	<Section store={store[2]}></Section>
-	<Section store={store[3]} type='mini'></Section>
-	<Section store={store[4]}></Section>
+
+	{#each daySections as daySection, i}
+		<Section store={store[i]} type={daySection}></Section>
+	{/each}
+
 </Collection>
