@@ -1,0 +1,16 @@
+food:
+  veg:
+    Coles de Bruselas:
+      protein: 8
+    Lechuga:
+      protein: 3
+
+  legumes:
+    Hummus:
+      protein: 10
+    Lentejas:
+
+recipe:
+  Bocadillo de Hummus:
+    - Hummus
+    - Lechuga

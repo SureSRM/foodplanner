@@ -45,7 +45,7 @@
 </script>
 
 <div class="collection_content {type}" bind:this={self}>
-	{#each itemKeys as key}
+	{#each $store as key}
 		<Item {key}/>
 	{/each}
 </div>
