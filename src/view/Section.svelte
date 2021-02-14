@@ -10,7 +10,7 @@
 	export let store
 	// Items takes the initial value of store and doesnt reacts anymore
 	// because Sortable manages the dom
-	let items = $store
+	let itemKeys = $store
 
 	let self
 	let sortable
@@ -45,7 +45,7 @@
 </script>
 
 <div class="collection_content {type}" bind:this={self}>
-	{#each items as item}
-		<Item {type} {item}/>
+	{#each itemKeys as key}
+		<Item {key}/>
 	{/each}
 </div>
