@@ -19,6 +19,6 @@
   "dependencies": {
     "js-yaml": "^4.0.0",
     "sirv-cli": "^1.0.0",
-    "sortablejs": "^1.13.0"
+    "svelte-dnd-action": "^0.8.9"
   }
 }

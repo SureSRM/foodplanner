@@ -1,51 +1,53 @@
 <script>
-	import Sortable from 'sortablejs'
-	import { onMount, onDestroy } from "svelte";
+	import { dndzone, TRIGGERS} from "svelte-dnd-action"
 
 	import Item from './Item.svelte'
 
+	export let key
 	export let isSortable
 
 	export let type = 'main'
 	export let store
-	// Items takes the initial value of store and doesnt reacts anymore
-	// because Sortable manages the dom
-	let itemKeys = $store
 
-	let self
-	let sortable
-	let unsubscribe
-	onMount(async () => {
+	let items = []
+	let ogItems
+	// if (key == 'shelf-veg') {
+	// 	items = [
+  //       {id: "Hummus"},
+  //       {id: "Pan"},
+  //   ];
+	// }
+	// store.set(items.map(i => i.id))
 
-		let group = isSortable ? 'shared' : ({
-				name: 'shared',
-				pull: 'clone',
-				put: false,
-		})
+	let handleDndConsider = (e) => {
+		items = e.detail.items
+	}
+	let handleDndFinalize = (e) => {
+		items = e.detail.items
+		store.set(e.detail.items.map(i => i.name))
+	}
 
-		sortable = Sortable.create(self, {
-				group,
-				sort: isSortable,
-				removeOnSpill: isSortable,
-				multiDrag: true,
-				selectedClass: 'selected',
-				animation: 100,
-				store: {
-						set: (s) => {
-							store.set(s.toArray())
-						},
-				},
-		})
+	if (!isSortable) {
+		handleDndConsider = (e) => {
+			items = e.detail.items
+		}
+		handleDndFinalize = (e) => {
+			items = ogItems
+		}
+	}
+
+	store.subscribe(s => {
+		items = s.map(i => ({id: Math.random(), name: i}))
+		ogItems = items
 	})
 
-	onDestroy(async () => {
-		sortable.destroy()
-		unsubscribe()
-	})
 </script>
 
-<div class="collection_content {type}" bind:this={self}>
-	{#each $store as key}
-		<Item {key}/>
+<div class="collection_content {type}"
+	use:dndzone="{{items}}"
+	on:consider="{handleDndConsider}"
+	on:finalize="{handleDndFinalize}">
+	{#each items as item(item.id)}
+		<Item key={item.name}/>
 	{/each}
 </div>

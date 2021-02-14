@@ -5,6 +5,20 @@ export const dayNames = ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom']
 export const daySections = ['main', 'mini', 'main', 'mini', 'main']
 export const shelfNames = ['recipe', 'veg', 'legumes', 'cereal', 'fruit', 'seednuts', 'dressing', 'process', 'misc']
 
+function usePersistence(key, defaultValue){
+	const value = JSON.parse(localStorage.getItem(key)) || defaultValue
+	const update = (s) => localStorage.setItem(key, JSON.stringify(s))
+	return [value, update]
+}
+
+function persistentWritable(key, defaultValue){
+	// console.log('Writable', key, localStorage.getItem(key))
+	const [value, update] = usePersistence(key, defaultValue)
+	const store = writable(value)
+	store.subscribe(update)
+	return store
+}
+
 export class FoodItem {
 	constructor(key, name, type, nutrivalues) {
 		this.key = key
@@ -27,11 +41,12 @@ const aggNutrivalues = (a, b) =>
 
 export class FoodDirectory {
 	constructor() {
-		this.directory = {}
-
+		const [dir, update] = usePersistence('directory', {})
+		this.directory = dir
+		this.persistDirectory = () => update(this.directory)
 		this.shelfs = {}
 		shelfNames.forEach(shelfName => {
-			this.shelfs[shelfName] = writable([])
+			this.shelfs[shelfName] = persistentWritable('shelf-'+shelfName, [])
 		})
 
 		this.files = writable([])
@@ -39,7 +54,11 @@ export class FoodDirectory {
 	}
 
 	get(key){
-		return this.directory[key]
+		const item = this.directory[key]
+		if (!item) {
+			console.warn('Item not found in directory', key);
+		}
+		return item
 	}
 
 	getKeys(){
@@ -59,67 +78,94 @@ export class FoodDirectory {
 
 	loadFoodItems(object){
 		Object.entries(object.food).forEach(([pantryName, foodItems]) => {
+			const pantryList = []
 			Object.entries(foodItems).forEach(([foodKey, foodValues]) => {
 				const newFoodItem = new FoodItem(
 					foodKey, foodKey, pantryName, foodValues
 				)
 				this.directory[foodKey] = newFoodItem
-				this.shelfs[pantryName].update((s) => {s.push(foodKey); return s})
+				pantryList.push(foodKey)
 			})
+			this.shelfs[pantryName].update((s) => s.concat(pantryList))
 		})
+		const recipeList = []
 		Object.entries(object.recipe).forEach(([recipeKey, recipeFoodList]) => {
 			const newFoodItem = new FoodItem(recipeKey, recipeKey, 'recipe')
 			recipeFoodList.forEach(foodKey => {
-				newFoodItem.addSubitem(this.directory[foodKey])
+				newFoodItem.addSubitem(this.get(foodKey))
 			})
 			this.directory[recipeKey] = newFoodItem
-			this.shelfs.recipe.update((s) => {s.push(recipeKey); return s})
+			recipeList.push(recipeKey)
 		})
+		this.shelfs.recipe.update((s) => s.concat(recipeList))
+		this.persistDirectory()
+	}
+
+	clear(){
+		Object.values(this.shelfs).forEach(shelfStore => {
+			shelfStore.set([])
+		})
+		this.directory = {}
+		this.persistDirectory()
 	}
 }
 
-export const showSubItems = writable(false)
+export const showSubItems = persistentWritable('showSubItems',true)
 
 export const foodDirectory = new FoodDirectory()
 export const filesStore = foodDirectory.files
 export const pantryStore = foodDirectory.shelfs
 
-// foodDirectory.add(new FoodItem('A', 'Pan', 'cereal', { protein: 8}))
-// foodDirectory.add(new FoodItem('B', 'Seitan', 'cereal', {protein: 20}))
-// let bocadilloSeitan = new FoodItem('C', 'Bocadillo de Seitan', 'combo')
-// bocadilloSeitan.addSubitem(foodDirectory.get('A'))
-// bocadilloSeitan.addSubitem(foodDirectory.get('B'))
-// foodDirectory.add(bocadilloSeitan)
-// console.log(foodDirectory.getKeys())
+// foodDirectory.loadFoodItems({
+// 	food: {
+// 		'veg': {
+// 			testA: {protein: 8},
+// 			testB: {protein: 5},
+// 		},
+// 	},
+// 	recipe: {
+// 		testC: ['testA', 'testB'],
+// 	},
+// })
 
-const initDay = () =>
-	daySections.map( () => writable([]))
+class Calendar {
+	constructor() {
+		this.calendarStore = {}
+		this.nutrivaluesStore = {}
 
-const initCalendar = () =>
-	dayNames.reduce( (o, dayName) =>
-		({...o, [dayName]: initDay()}), {})
+		dayNames.forEach(dayName => {
+			this.calendarStore[dayName] = []
+			daySections.forEach( (_, index) => {
+					this.calendarStore[dayName][index] = persistentWritable(dayName+index, [])
+			})
 
-export const calendarStore = initCalendar()
+			this.nutrivaluesStore[dayName] = derived(
+				this.calendarStore[dayName],
+				this.computeNutrivalues.bind(this)
+			)
+		})
+	}
 
+	computeNutrivalues(sections) {
+		const itemKeys = sections.flat(2)
+		let items = itemKeys.map(k => foodDirectory.get(k))
+		return {
+			'protein': items.reduce((o, i) => o+i.nutrivalues.protein, 0)
+		}
+	}
 
-function computeValues(sections) {
-	const itemKeys = sections.flat(2)
-	let items = itemKeys.map(k => foodDirectory.get(k))
-	return {
-		'protein': items.reduce((o, i) => o+i.nutrivalues.protein, 0)
+	clear(){
+		Object.values(this.calendarStore).forEach( day => {
+			const stores = day.flat(1)
+			stores.forEach(store => {
+				store.set([])
+			})
+		})
 	}
 }
 
-export const test = derived (
-	calendarStore['lun'],
-	computeValues
-)
-test.subscribe((e) => console.log('Test', e))
+export const calendar = new Calendar()
+export const calendarStore = calendar.calendarStore
+export const nutrivaluesStore = calendar.nutrivaluesStore
 
-
-// const initPantry = () =>
-// 	shelfNames.reduce( (o, dayName) =>
-// 		({...o, [dayName]: writable([])}), {})
-//
-// export const pantryStore = initPantry()
-// pantryStore['veg'].set(foodDirectory.getKeys())
+nutrivaluesStore['lun'].subscribe((e) => console.log('Nutrifacts Lun', e))

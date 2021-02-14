@@ -7,5 +7,5 @@
 </script>
 
 <Collection type='pantry' title={foodFamily}>
-	<Section {store} isSortable={false} />
+	<Section {store} key="shelf-{foodFamily}" isSortable={false} />
 </Collection>

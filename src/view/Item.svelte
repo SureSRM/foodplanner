@@ -2,10 +2,12 @@
 	import { foodDirectory, showSubItems } from '../model'
 	export let key
 
-	let item = foodDirectory.get(key)
+	let item = foodDirectory.get(key) || {name: key, type: 'none', subitems: []}
+
+	// item
 </script>
 
-<div data-id={key} class="item {item.type}">{item.name}
+<div class="item {item.type}">{item.name}
 {#if item.subitems.length > 0}
 	<div>
 		{#if $showSubItems}
