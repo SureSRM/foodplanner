@@ -51,6 +51,7 @@ export class FoodDirectory {
 
 		this.files = writable([])
 		this.files.subscribe(this.onFilesChange.bind(this))
+		this.fetchFoodItems()
 	}
 
 	get(key){
@@ -71,12 +72,28 @@ export class FoodDirectory {
 		}
 		const reader = new FileReader()
 		reader.onload = r => {
-			this.loadFoodItems(jsyaml.load(r.target.result))
+			this.loadFoodItems(r.target.result)
 		}
 		reader.readAsText(files[0])
 	}
 
-	loadFoodItems(object){
+	async fetchFoodItems(){
+		const urlParams = new URLSearchParams(window.location.search)
+		const uri = urlParams.get("recipes")
+		try {
+			const response = await fetch(uri)
+			const body = await response.text()
+			this.loadFoodItems(body)
+		} catch(e){
+			console.warn(`Problem fetching `+uri+' '+e)
+			return
+		}
+	}
+
+	loadFoodItems(text){
+		const object = jsyaml.load(text)
+		this.clear()
+		console.log("Cleared")
 		Object.entries(object.food).forEach(([pantryName, foodItems]) => {
 			const pantryList = []
 			Object.entries(foodItems).forEach(([foodKey, foodValues]) => {
@@ -144,14 +161,30 @@ class Calendar {
 				this.computeNutrivalues.bind(this)
 			)
 		})
+		this.clearOrphanItems()
 	}
 
 	computeNutrivalues(sections) {
 		const itemKeys = sections.flat(2)
-		let items = itemKeys.map(k => foodDirectory.get(k))
+		let items = itemKeys.map(k => foodDirectory.get(k, null)).filter(x => !!x)
 		return {
 			'protein': items.reduce((o, i) => o+i.nutrivalues.protein, 0)
 		}
+	}
+
+	clearOrphanItems(){
+		Object.values(this.calendarStore).forEach( day => {
+			const stores = day.flat(1)
+			stores.forEach(store => {
+				store.update((s)=>{
+					console.log(s)
+					const filteredItems = s.filter((id) => !!foodDirectory.get(id))
+					console.log(filteredItems)
+					return filteredItems
+				})
+				
+			})
+		})
 	}
 
 	clear(){

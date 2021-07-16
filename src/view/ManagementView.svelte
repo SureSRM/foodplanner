@@ -9,4 +9,5 @@
 </form>
 <button on:click={()=>calendar.clear()}>Clean Menu</button>
 <button on:click={()=>foodDirectory.clear()}>Clean Pantry</button>
+<button on:click={()=>foodDirectory.fetchFoodItems()}>Re-fetch Food Items from URI</button>
 <button on:click={()=>$showSubItems = !$showSubItems}>Show Sub Items: {$showSubItems}</button>
